@@ -43,18 +43,28 @@ const projects = [
     image: "/assets/projects/Flowforge Project files/The Grooming District/Thumbnail.png",
     tech: ["React", "Tailwind", "Webflow"],
     features: ["Service Booking", "Product Store", "Loyalty Integration"],
-    liveLink: "https://district-grooming-lounge.vercel.app/"
-  },
-  {
-    id: 5,
-    title: "Forging",
-    category: "AGENCY PLATFORM",
-    description: "An internal agency platform designed to streamline performance tracking, client interactions, and automated design workflows.",
-    image: null,
-    tech: ["React Native", "Node.js", "PostgreSQL"],
-    features: ["Performance Dashboard", "Client Portal", "Automated Workflows"],
-    liveLink: "#"
-  },
+      liveLink: "https://district-grooming-lounge.vercel.app/"
+    }, // <-- This closing bracket and comma was the missing link!
+    {
+      id: 5,
+      title: "Vortex Gear",
+      category: "E-COMMERCE & 3D WEBGL",
+      description: "A high-end, cinematic product showcase featuring custom-generated 3D hardware assets, advanced hover physics, and Awwwards-level scroll animations.",
+      image: "/assets/projects/Flowforge Project files/Vortex Gear/vortex-thumb.png",
+      tech: ["React", "Tailwind CSS", "Framer Motion", "Vite"],
+      features: ["3D Scroll Physics", "Nano Banana Assets", "Responsive Bento Grid"],
+      liveLink: "https://vortex-gear.vercel.app/" // Paste your actual live Vercel link here!
+    },
+    {
+      id: 6,
+      title: "Forging...",
+      category: "IN DEVELOPMENT",
+      description: "A new digital experience is currently being forged in the studio. Stay tuned for our next high-performance deployment.",
+      image: null,
+      tech: ["Classified", "Next.js", "WebGL"],
+      features: ["Top Secret", "Coming Soon", "Under NDA"],
+      liveLink: "#"
+    }
 ];
 
 export type Project = typeof projects[0];
@@ -179,27 +189,34 @@ const ProjectCarousel = memo(({ onSelectProject }: { onSelectProject: (project: 
 
   useEffect(() => {
     const ctx = gsap.context(() => {
+      // Force GSAP to recalculate after React finishes its paint cycle
+      requestAnimationFrame(() => {
+        ScrollTrigger.refresh();
+      });
       const horizontalSection = horizontalRef.current;
       if (!horizontalSection) return;
 
-      const totalWidth = horizontalSection.scrollWidth;
-      const viewportWidth = window.innerWidth;
-      const scrollAmount = totalWidth - viewportWidth;
+      // Dynamic getter function to recalculate width if the DOM shifts
+      const getScrollAmount = () => {
+        if (!horizontalSection) return 0;
+        return horizontalSection.scrollWidth - window.innerWidth;
+      };
 
       // Main horizontal scroll
       const mainTl = gsap.timeline({
         scrollTrigger: {
-          trigger: triggerRef.current,
+          trigger: sectionRef.current, // <-- Pin the outermost wrapper, not the inner div
           start: "top top",
-          end: () => `+=${scrollAmount * 1.5}`, // Make it feel a bit slower/weightier
+          end: () => `+=${getScrollAmount() * 1.5}`, 
           pin: true,
           scrub: 1,
           invalidateOnRefresh: true,
+          anticipatePin: 1, // <-- Injected to eliminate the 1-frame layout snap
         },
       });
 
       mainTl.to(horizontalSection, {
-        x: -scrollAmount,
+        x: () => -getScrollAmount(), // Functional value allows GSAP to recalculate perfectly
         ease: "none",
       });
 
@@ -276,7 +293,12 @@ const ProjectCarousel = memo(({ onSelectProject }: { onSelectProject: (project: 
   }, []);
 
   return (
-    <section id="projects" ref={sectionRef} className="bg-pure-black/50 overflow-hidden perspective-1000">
+    <section 
+      id="projects" 
+      ref={sectionRef} 
+      className="bg-pure-black/50 overflow-hidden perspective-1000"
+      style={{ willChange: "transform" }}
+    >
       <div ref={triggerRef} className="min-h-screen flex flex-col justify-start pt-20 pb-12">
         <div className="max-w-7xl mx-auto px-6 w-full mb-8">
           <div className="flex flex-col md:flex-row justify-between items-end gap-8">

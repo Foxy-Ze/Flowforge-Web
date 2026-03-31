@@ -1,7 +1,8 @@
+import React, { useRef } from "react";
 import { motion } from "motion/react";
 import { ArrowRight, Code, Layout, Rocket, Zap } from "lucide-react";
 import Button from "./Button";
-
+import { gsap } from "gsap";
 const services = [
   {
     title: "Website Design",
@@ -26,6 +27,55 @@ const services = [
 ];
 
 export default function Services() {
+  // ═══════════════════════════════════════════
+  // AMBIENT FORGE GLOW PHYSICS
+  // ═══════════════════════════════════════════
+  const emitterRefs = useRef<{ [key: string]: NodeJS.Timeout }>({});
+
+  const handleMouseEnter = (e: React.MouseEvent<HTMLDivElement>, id: string) => {
+    const card = e.currentTarget;
+    if (getComputedStyle(card).position === 'static') card.style.position = 'relative';
+
+    emitterRefs.current[id] = setInterval(() => {
+      const spark = document.createElement('div');
+      const size = Math.random() * 4 + 1;
+      const colors = ['#FF6B35', '#FFC145', '#FF8C42'];
+      const rect = card.getBoundingClientRect();
+
+      const isEdge = Math.random() > 0.5;
+      const spawnX = isEdge ? Math.random() * rect.width : (Math.random() > 0.5 ? 0 : rect.width);
+      const spawnY = isEdge ? rect.height - (Math.random() * 20) : Math.random() * rect.height;
+
+      spark.style.cssText = `
+        position: absolute;
+        width: ${size}px;
+        height: ${size}px;
+        background: ${colors[Math.floor(Math.random() * colors.length)]};
+        border-radius: 50%;
+        left: ${spawnX}px;
+        top: ${spawnY}px;
+        pointer-events: none;
+        box-shadow: 0 0 ${size * 3}px currentColor;
+        z-index: -1;
+      `;
+
+      card.appendChild(spark);
+
+      gsap.to(spark, {
+        y: (Math.random() - 0.5) * 80 - 40,
+        x: (Math.random() - 0.5) * 80,
+        opacity: 0,
+        scale: 0,
+        duration: 1 + Math.random(),
+        ease: "sine.out",
+        onComplete: () => spark.remove()
+      });
+    }, 50);
+  };
+
+  const handleMouseLeave = (id: string) => {
+    clearInterval(emitterRefs.current[id]);
+  };
   return (
     <section id="services" className="py-24 px-6 relative overflow-hidden">
       {/* Background Accent */}
@@ -64,13 +114,15 @@ export default function Services() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {services.map((service, index) => (
             <motion.div
-              key={service.title}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: index * 0.1 }}
-              className="glass p-8 group glass-orange-hover"
-            >
+            key={service.title}
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: index * 0.1 }}
+            className="glass p-8 group glass-orange-hover"
+            onMouseEnter={(e) => handleMouseEnter(e, service.title)}
+            onMouseLeave={() => handleMouseLeave(service.title)}
+          >
               <div className="w-16 h-16 glass flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-500">
                 {service.icon}
               </div>

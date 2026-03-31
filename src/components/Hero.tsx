@@ -27,8 +27,8 @@ const Hero = () => {
       const yPos = (clientY / window.innerHeight - 0.5) * 2;
 
       gsap.to(threeDRef.current, {
-        x: xPos * 30,
-        y: yPos * 30,
+        x: xPos * 60,
+        y: yPos * 60,
         duration: 1,
         ease: "power2.out"
       });
@@ -54,7 +54,7 @@ const Hero = () => {
       // ═══════════════════════════════════════════
       // ENTRY ANIMATIONS (Non-scroll)
       // ═══════════════════════════════════════════
-
+      gsap.set(threeDRef.current, { scale: 1.35 });
       const entryTl = gsap.timeline({ delay: 0.5 });
 
       // Phase 1: "Let it Flow" - flowing in

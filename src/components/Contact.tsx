@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { motion } from "motion/react";
 import { Send, Phone, Mail, MapPin } from "lucide-react";
 import Button from "./Button";
 import ForgeCore from "./ForgeCore";
+import { submitLead } from "../services/leadService";
 
 export default function Contact() {
   const [formState, setFormState] = useState({
@@ -12,15 +13,56 @@ export default function Contact() {
     message: "",
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [botField, setBotField] = useState("");
+  const [cooldown, setCooldown] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  // Check if the user is locked out from a recent submission
+  useEffect(() => {
+    const lastSubmit = localStorage.getItem("forge_cooldown");
+    if (lastSubmit && Date.now() - parseInt(lastSubmit) < 60000) {
+      setCooldown(true);
+      setTimeout(() => setCooldown(false), 60000 - (Date.now() - parseInt(lastSubmit)));
+    }
+  }, []);
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    // TRAP 1: The Honeypot (Silent bot rejection)
+    if (botField !== "") {
+      setIsSubmitting(true);
+      setTimeout(() => {
+        setIsSubmitting(false);
+        setFormState({ name: "", email: "", phone: "", message: "" });
+        setBotField("");
+        alert("Inquiry sent! We'll forge a connection soon."); // Fake success so bots move on
+      }, 1000);
+      return;
+    }
+
+    // TRAP 2: The Cooldown Lock
+    if (cooldown) {
+      alert("The forge is cooling down. Please wait a minute before sending another request.");
+      return;
+    }
+
     setIsSubmitting(true);
-    setTimeout(() => {
-      setIsSubmitting(false);
+    
+    const result = await submitLead(formState);
+    
+    setIsSubmitting(false);
+
+    if (result.success) {
       setFormState({ name: "", email: "", phone: "", message: "" });
+      
+      // Engage the 60-second cooldown lock
+      localStorage.setItem("forge_cooldown", Date.now().toString());
+      setCooldown(true);
+      setTimeout(() => setCooldown(false), 60000);
+      
       alert("Inquiry sent! We'll forge a connection soon.");
-    }, 2000);
+    } else {
+      alert(result.error || "Failed to forge connection. Please try again.");
+    }
   };
 
   return (
@@ -77,7 +119,7 @@ export default function Contact() {
                 </div>
                 <div>
                   <p className="text-sm text-light/40 uppercase tracking-widest font-bold">Email Us</p>
-                  <p className="text-xl font-display font-bold">hello@flowforge.ai</p>
+                  <p className="text-xl font-display font-bold">getflowforged@gmail.com</p>
                 </div>
               </motion.div>
 
@@ -93,7 +135,7 @@ export default function Contact() {
                 </div>
                 <div>
                   <p className="text-sm text-light/40 uppercase tracking-widest font-bold">Call Us</p>
-                  <p className="text-xl font-display font-bold">+91 1234567890</p>
+                  <p className="text-xl font-display font-bold">+91 8975006446</p>
                 </div>
               </motion.div>
 
@@ -109,7 +151,7 @@ export default function Contact() {
                 </div>
                 <div>
                   <p className="text-sm text-light/40 uppercase tracking-widest font-bold">Location</p>
-                  <p className="text-xl font-display font-bold">Mumbai, India</p>
+                  <p className="text-xl font-display font-bold">India</p>
                 </div>
               </motion.div>
             </div>
@@ -122,6 +164,18 @@ export default function Contact() {
             className="glass p-8 md:p-12 rounded-3xl relative backdrop-blur-md"
           >
             <form onSubmit={handleSubmit} className="space-y-6">
+              {/* ═══════════════════════════════════════════ */}
+              {/* INVISIBLE HONEYPOT FIELD (BOT TRAP)         */}
+              {/* ═══════════════════════════════════════════ */}
+              <input 
+                type="text" 
+                name="honey_contact" 
+                value={botField} 
+                onChange={(e) => setBotField(e.target.value)} 
+                style={{ display: "none" }} 
+                tabIndex={-1} 
+                autoComplete="off" 
+              />
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-2">
                   <label className="text-sm font-bold text-light/50 uppercase tracking-widest">Name</label>

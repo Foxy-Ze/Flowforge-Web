@@ -12,7 +12,11 @@ export default function Footer() {
       {/* Background Accent */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-px fiery-gradient opacity-20" />
 
-      <div className="max-w-7xl mx-auto">
+      {/* 
+        CRITICAL FIX: Added `relative z-10` to this main content wrapper 
+        so it sits above the glowing text layer. 
+      */}
+      <div className="max-w-7xl mx-auto relative z-10">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
           <div className="lg:col-span-1">
             <a href="#home" className="flex items-center gap-2 mb-6 group">
@@ -78,7 +82,7 @@ export default function Footer() {
 
         <div className="pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-6">
           <p className="text-light/20 text-xs">
-            © 2025 Flowforge. All rights reserved. Designed by Ayush.
+            © 2026 Flowforge. All rights reserved. Designed by Ayush.
           </p>
           <div className="flex gap-8">
             <a href="#" className="text-light/20 hover:text-light/40 text-xs transition-colors">Privacy Policy</a>
@@ -91,6 +95,26 @@ export default function Footer() {
             <ArrowUp size={18} />
           </button>
         </div>
+      </div>
+
+      {/* ═══════════════════════════════════════════ */}
+      {/* AMBIENT GLOWING LOGO INJECTION              */}
+      {/* ═══════════════════════════════════════════ */}
+      {/* Changed -z-10 to z-0 so it sits on top of the black background, but behind the content */}
+      <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-full flex justify-center pointer-events-none z-0 select-none overflow-hidden pb-4">
+        <motion.h1
+          initial={{ opacity: 0, y: 100 }}
+          whileInView={{ opacity: 0.15, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 1.5, ease: "easeOut" }}
+          className="text-[18vw] font-display font-black leading-none tracking-tighter text-transparent"
+          style={{
+            WebkitTextStroke: "2px #FF6B35",
+            textShadow: "0px 0px 80px rgba(255, 107, 53, 0.4), 0px 10px 40px rgba(255, 107, 53, 0.2)",
+          }}
+        >
+          FLOWFORGE
+        </motion.h1>
       </div>
     </footer>
   );

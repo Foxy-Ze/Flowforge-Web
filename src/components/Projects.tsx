@@ -57,11 +57,21 @@ const projects = [
     },
     {
       id: 6,
+      title: "Aura Stays",
+      category: "HOSPITALITY & BOOKING", 
+      description: "A premium digital experience for luxury accommodations, featuring seamless exploration and immersive property showcases.",
+      image: "/assets/projects/Flowforge Project files/Aura Stays/Aura-stays thumb.png", // <-- Replace with actual file name!
+      tech: ["React", "Tailwind CSS", "Framer Motion"], 
+      features: ["Property Showcase", "Dynamic Routing", "Premium UI"],
+      liveLink: "https://aura-stays-three.vercel.app/"
+    },
+    {
+      id: 6,
       title: "Forging...",
       category: "IN DEVELOPMENT",
       description: "A new digital experience is currently being forged in the studio. Stay tuned for our next high-performance deployment.",
       image: null,
-      tech: ["Classified", "Next.js", "WebGL"],
+      tech: ["wonder"],
       features: ["Top Secret", "Coming Soon", "Under NDA"],
       liveLink: "#"
     }

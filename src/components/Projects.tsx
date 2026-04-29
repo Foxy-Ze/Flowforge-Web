@@ -13,7 +13,7 @@ const projects = [
     image: "/assets/projects/Flowforge Project files/Brightsmile Dental Clinic/Thumbnail.png",
     tech: ["Next.js", "Tailwind", "Framer Motion"],
     features: ["Appointment Booking", "Patient Trust", "Clean Layout"],
-    liveLink: "https://brightsmile-magic.vercel.app/"
+    liveLink: "https://brightsmile-dental-clinic-sigma.vercel.app/"
   },
   {
     id: 2,

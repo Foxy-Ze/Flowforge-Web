@@ -27,13 +27,13 @@ const projects = [
   },
   {
     id: 3,
-    title: "Saffron & Thyme Restaurant",
+    title: "Saffron & Thyme",
     category: "RESTAURANT WEBSITE",
-    description: "An elegant dining experience extended to the web. Features a dynamic menu, online reservations, and a rich visual presentation of their culinary offerings.",
+    description: "A cinematic, Awwwards-tier digital environment for a luxury rooftop restaurant. Engineered with a custom preloader, zero-latency horizontal scroll, and an asynchronous reservation engine.",
     image: "/assets/projects/Flowforge Project files/Saffron & Thyme Restaurant/Thumbnail.png",
-    tech: ["Next.js", "Framer Motion", "Stripe"],
-    features: ["Dynamic Menu Integration", "Online Reservations", "Elegant Typography"],
-    liveLink: "https://saffron-thyme-showcase.vercel.app/"
+    tech: ["React", "GSAP", "Framer Motion", "Lenis", "Tailwind CSS"],
+    features: ["Cinematic Preloader", "Horizontal Scroll-Pinning", "Asymmetrical Masonry Grid", "Interactive Reservation Engine"],
+    liveLink: "https://safffron-thyme.vercel.app/"
   },
   {
     id: 4,

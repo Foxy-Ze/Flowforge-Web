@@ -18,12 +18,12 @@ const projects = [
   {
     id: 2,
     title: "Inklust Tattoo Studio",
-    category: "PORTFOLIO & BOOKING",
-    description: "A dark, immersive website showcasing artist portfolios and a seamless booking experience, reflecting the studio's edgy and bold identity.",
+    category: "Editorial & BOOKING",
+    description: "A cinematic, vintage magazine-style showcase featuring high contrast editorial layouts & immersive GSAP motion for heritage tattoo studio.",
     image: "/assets/projects/Flowforge Project files/Inklust tattoo studio/thumbnail.png",
-    tech: ["React", "GSAP", "Sanity CMS"],
-    features: ["Dark Theme Aesthetics", "Artist Portfolios", "Interactive Booking"],
-    liveLink: "https://inklust-inkwell.vercel.app/"
+    tech: ["React", "GSAP", "Vite", "Tailwind CSS"],
+    features: ["Vintage magazine aesthetic", "Scroll-Triggered storytelling", "Interactive Booking"],
+    liveLink: "https://inklust-studio.vercel.app/"
   },
   {
     id: 3,
